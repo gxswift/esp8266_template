@@ -10,6 +10,7 @@
 #include <string.h>
 #include <freertos/FreeRTOS.h>
 #include <freertos/task.h>
+
 #include <esp_system.h>
 #include <esp_wifi.h>
 #include <esp_event_loop.h>
@@ -121,11 +122,11 @@ void app_main()
 
     /* Check if device is provisioned */
     io_config();
-
+    xTaskCreate(restart_task, "restart", 512, NULL, 8, NULL);
 
     uint32_t provisioned = rtc_mem_read(0);
 
-    if (provisioned != 0xEFEFEFEF) {
+    if (provisioned == 0x12345678) {
         /* If not provisioned, start provisioning via soft AP */
         ESP_LOGI(TAG, "Starting WiFi SoftAP provisioning");
 
@@ -148,8 +149,6 @@ void app_main()
         if (err != ESP_OK) {
             ESP_LOGE(TAG, "Failed to start WiFi AP");
         }
-
-        xTaskCreate(tcp_server_task, "tcp_server", 4096, NULL, 5, NULL);
         httpd_init();
         httpd_cgi_init();
 //--------------------------------------------------------------------------------------
@@ -160,5 +159,6 @@ void app_main()
         start_wifi_station();
         wait_for_ip();
         xTaskCreate(tcp_client_task, "tcp_client", 4096, NULL, 5, NULL);
+        xTaskCreate(tcp_server_task, "tcp_server", 4096, NULL, 5, NULL);
     }
 }

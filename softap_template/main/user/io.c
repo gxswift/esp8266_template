@@ -25,6 +25,8 @@ static const char *TAG = "io";
 #define GPIO_INPUT_PIN_SEL  ((1ULL<<GPIO_INPUT_IO_0) | (1ULL<<GPIO_INPUT_IO_1))
 
 static xQueueHandle gpio_evt_queue = NULL;
+static xQueueHandle led_evt_queue = NULL;
+static xQueueHandle led_fre_queue = NULL;
 
 static void gpio_isr_handler(void *arg)
 {
@@ -41,22 +43,57 @@ static void gpio_task_example(void *arg)
             ESP_LOGI(TAG, "GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
             if (io_num == 0 && gpio_get_level(io_num) == 1)
             {
-  			  rtc_mem_write(0,0x12345678);
-  			  printf("restart\r\n\r\n\r\n");
-  			  esp_restart();;//restart
+            	restart_to_ap();
             }
         }
     }
+}
+
+void led_function(uint32_t fun)
+{
+    uint32_t fun_num = fun;
+    xQueueSend(led_evt_queue, &fun_num, NULL);
+}
+
+void led_frequency(uint32_t fre)
+{
+    uint32_t fre_num = fre;
+    xQueueSend(led_fre_queue, &fre_num, NULL);
 }
 
 
 void led_task(void *pvParameters)
 {
 	int cnt = 0;
+	uint32_t fun_num;
+	static uint32_t led_flag = 2;
+	static uint32_t frequency = 1;
+	led_evt_queue = xQueueCreate(10, sizeof(uint32_t));
+	led_fre_queue = xQueueCreate(10, sizeof(uint32_t));
 	while(1)
 	{
-        vTaskDelay(1000 / portTICK_RATE_MS);
-        gpio_set_level(GPIO_OUTPUT_IO_0, (cnt++) % 2);
+		if (xQueueReceive(led_evt_queue, &fun_num, 1))
+		{
+			led_flag = fun_num;
+		}
+		if (xQueueReceive(led_fre_queue, &fun_num, 1))
+		{
+			frequency = fun_num;
+		}
+		//-------------------------------------------
+		if (led_flag == 0)
+		{
+			gpio_set_level(GPIO_OUTPUT_IO_0, 1);
+		}
+		else if(led_flag == 1)
+		{
+			gpio_set_level(GPIO_OUTPUT_IO_0, 0);
+		}
+		else if (led_flag == 2)
+		{
+			vTaskDelay((500/frequency) / portTICK_RATE_MS);
+			gpio_set_level(GPIO_OUTPUT_IO_0, (cnt++) % 2);
+		}
 	}
 }
 

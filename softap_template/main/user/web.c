@@ -14,6 +14,10 @@
 
 
 #include "rtc_memory.h"
+#include "flash.h"
+
+
+
 #define NUM_CONFIG_CGI_URIS	1
 const char *Set_CGI_Handler(int iIndex, int iNumParams, char *pcParam[], char *pcValue[]);
 static const tCGI ppcURLs[]=
@@ -54,6 +58,9 @@ const char *Set_CGI_Handler(int iIndex, int iNumParams, char *pcParam[], char *p
 			  {
 
 			  }
+			  memcpy(connect_info.ssid,pcValue[i],strlen(pcValue[i]));
+			  connect_info.ssidlen = strlen(pcValue[i]);
+
 			}
 			else if(strcmp(pcParam[i],"password") == 0)  //??CGI??
 			{
@@ -62,8 +69,10 @@ const char *Set_CGI_Handler(int iIndex, int iNumParams, char *pcParam[], char *p
 			  {
 
 			  }
-			  rtc_mem_write(0,0xEFEFEFEF);
-			  esp_restart();//restart
+			  memcpy(connect_info.password,pcValue[i],strlen(pcValue[i]));
+			  connect_info.passwordlen = strlen(pcValue[i]);
+			  wifi_info_write();
+			  restart_to_sta();
 			}
 	   }
 	}

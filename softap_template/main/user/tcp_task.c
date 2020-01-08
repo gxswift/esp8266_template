@@ -18,7 +18,7 @@
 #include "freertos/task.h"
 
 #include "tcp_task.h"
-
+#include "io.h"
 #define EXAMPLE_WIFI_SSID CONFIG_WIFI_SSID
 #define EXAMPLE_WIFI_PASS CONFIG_WIFI_PASSWORD
 
@@ -119,7 +119,19 @@ void tcp_server_task(void* pvParameters)
                 rx_buffer[len] = 0; // Null-terminate whatever we received and treat like a string
                 ESP_LOGI(TAG, "Received %d bytes from %s:", len, addr_str);
                 ESP_LOGI(TAG, "%s", rx_buffer);
-
+//---------------
+                uint32_t tem = 0;
+                if (strncmp(rx_buffer,"led=",4) == 0)
+                {
+                	tem = atoi((char*)(rx_buffer+4));
+                	led_function(tem);
+                }
+                else if (strncmp(rx_buffer,"fre=",4) == 0)
+                {
+                	tem = atoi((char*)(rx_buffer+4));
+                	led_frequency(tem);
+                }
+//---------------
                 int err = send(sock, rx_buffer, len, 0);
                 if (err < 0) {
                     ESP_LOGE(TAG, "Error occured during sending: errno %d", errno);

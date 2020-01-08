@@ -7,6 +7,9 @@
 
 #include "freertos/event_groups.h"
 
+
+#include "flash.h"
+
 static const char *TAG = "ap";
 esp_err_t start_wifi_ap(const char *ssid, const char *pass)
 {
@@ -78,6 +81,7 @@ const int IPV6_GOTIP_BIT = BIT1;
 void start_wifi_station(void)
 {
     wifi_event_group = xEventGroupCreate();
+    wifi_info_read();
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK( esp_wifi_init(&cfg) );
     ESP_ERROR_CHECK( esp_wifi_set_storage(WIFI_STORAGE_RAM) );
