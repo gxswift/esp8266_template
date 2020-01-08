@@ -52,14 +52,15 @@ void restart_task(void *pvParameters)
             if (restart == 0)//ap
             {
             	rtc_mem_write(0,0x12345678);
+				vTaskDelay(1000 / portTICK_RATE_MS);
+				esp_restart();//restart
             }
-            else
+            else if(restart == 1)
             {
             	rtc_mem_write(0,0xEFEFEFEF);
-
+      			esp_restart();//restart
             }
-            vTaskDelay(1000 / portTICK_RATE_MS);
-  			esp_restart();//restart
+
         }
     }
 }

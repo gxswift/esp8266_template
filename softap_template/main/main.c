@@ -128,7 +128,7 @@ void app_main()
     xTaskCreate(restart_task, "restart", 512, NULL, 8, NULL);
 
     uint32_t provisioned = rtc_mem_read(0);
-
+    printf("rtc mem = %x,tick = %ld\r\n",provisioned,xTaskGetTickCount());
     if (provisioned == 0x12345678) {
         /* If not provisioned, start provisioning via soft AP */
         ESP_LOGI(TAG, "Starting WiFi SoftAP provisioning");

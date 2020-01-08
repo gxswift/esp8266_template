@@ -42,12 +42,12 @@ static void gpio_isr_handler(void *arg)
 static void gpio_task_example(void *arg)
 {
     uint32_t io_num;
-
     for (;;) {
         if (xQueueReceive(gpio_evt_queue, &io_num, portMAX_DELAY)) {
             ESP_LOGI(TAG, "GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
             if (io_num == 0 && gpio_get_level(io_num) == 1)
             {
+            	if (xTaskGetTickCount() > 2000*portTICK_RATE_MS)
             	restart_to_ap();
             }
         }
