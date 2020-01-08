@@ -91,7 +91,7 @@ void led_task(void *pvParameters)
 		}
 		else if (led_flag == 2)
 		{
-			vTaskDelay((500/frequency) / portTICK_RATE_MS);
+			vTaskDelay((500-frequency) / portTICK_RATE_MS);
 			gpio_set_level(GPIO_OUTPUT_IO_0, (cnt++) % 2);
 		}
 	}
