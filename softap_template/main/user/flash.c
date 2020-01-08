@@ -1,10 +1,18 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 #include "esp_system.h"
 #include "esp_spi_flash.h"
 #include "portmacro.h"
 #include "flash.h"
+
+
+#include "urlencode.h"
+
+
 
 void get_chip_info()
 {
@@ -25,15 +33,29 @@ void get_chip_info()
 
 wifi_connect_info connect_info;
 
-void wifi_info_read()
+void wifi_info_read(char *ssid,char *password)
 {
 	spi_flash_read(CONNECT_ADD,&connect_info,sizeof(connect_info));
-	printf("read ssid = %s,len = %d,password = %s,len = %d\r\n",connect_info.ssid,connect_info.ssidlen,connect_info.password,connect_info.passwordlen);
+
+	strcpy(ssid,connect_info.ssid);
+	strcpy(password,connect_info.password);
+	printf("read ssid = %s,password = %s\r\n",connect_info.ssid,connect_info.password);
 }
 
-void wifi_info_write()
+void wifi_info_write(const char *ssid,const char *password)
 {
+	char password_decode[64];
+	memset(connect_info.ssid,0,sizeof(connect_info.ssid));
+	memset(connect_info.password,0,sizeof(connect_info.password));
+
+
+	memcpy(connect_info.ssid,ssid,strlen(ssid));
+
+	memcpy(password_decode,password,strlen(password));
+	urldecode(password_decode);
+	memcpy(connect_info.password,password_decode,strlen(password_decode));
+
 	spi_flash_erase_sector(CONNECT_ADD/4096);
 	spi_flash_write(CONNECT_ADD,&connect_info,sizeof(connect_info));
-	printf("write ssid = %s,len = %d,password = %s,len = %d\r\n",connect_info.ssid,connect_info.ssidlen,connect_info.password,connect_info.passwordlen);
+	printf("write ssid = %s,password = %s\r\n",connect_info.ssid,connect_info.password);
 }

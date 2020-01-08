@@ -10,6 +10,9 @@
 
 #include "flash.h"
 
+#define LOG_LOCAL_LEVEL ESP_LOG_NONE
+
+
 static const char *TAG = "ap";
 esp_err_t start_wifi_ap(const char *ssid, const char *pass)
 {
@@ -81,16 +84,17 @@ const int IPV6_GOTIP_BIT = BIT1;
 void start_wifi_station(void)
 {
     wifi_event_group = xEventGroupCreate();
-    wifi_info_read();
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK( esp_wifi_init(&cfg) );
     ESP_ERROR_CHECK( esp_wifi_set_storage(WIFI_STORAGE_RAM) );
     wifi_config_t wifi_config = {
         .sta = {
+        		/*
             .ssid = EXAMPLE_WIFI_SSID,
-            .password = EXAMPLE_WIFI_PASS,
+            .password = EXAMPLE_WIFI_PASS,*/
         },
     };
+    wifi_info_read((char*)(wifi_config.sta.ssid),(char*)(wifi_config.sta.password));
     ESP_LOGI(TAG, "Setting WiFi configuration SSID %s...", wifi_config.sta.ssid);
     ESP_ERROR_CHECK( esp_wifi_set_mode(WIFI_MODE_STA) );
     ESP_ERROR_CHECK( esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config) );

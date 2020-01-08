@@ -33,6 +33,9 @@
 
 static const char *TAG = "app";
 
+
+#define LOG_LOCAL_LEVEL ESP_LOG_NONE
+
 static esp_err_t event_handler(void *ctx, system_event_t *event)
 {
 	system_event_info_t *info = &event->event_info;

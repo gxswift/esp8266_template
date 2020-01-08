@@ -46,6 +46,10 @@ static int FindCGIParameter(const char *pcToFind,char *pcParam[],int iNumParams)
 const char *Set_CGI_Handler(int iIndex, int iNumParams, char *pcParam[], char *pcValue[])
 {
 	uint8_t i=0;
+	/*char ssidtemp[32]={0},passwordtemp[64]={0};*/
+
+	char *ssidtemp = NULL;
+	char *passwordtemp = NULL;
 	iIndex =FindCGIParameter("ssid",pcParam,iNumParams);
 	if(iIndex != -1)
 	{
@@ -58,8 +62,12 @@ const char *Set_CGI_Handler(int iIndex, int iNumParams, char *pcParam[], char *p
 			  {
 
 			  }
+			  /*
 			  memcpy(connect_info.ssid,pcValue[i],strlen(pcValue[i]));
 			  connect_info.ssidlen = strlen(pcValue[i]);
+			  */
+			ssidtemp = pcValue[i];
+			  //  memcpy(ssidtemp,pcValue[i],strlen(pcValue[i]));
 
 			}
 			else if(strcmp(pcParam[i],"password") == 0)  //??CGI??
@@ -69,9 +77,13 @@ const char *Set_CGI_Handler(int iIndex, int iNumParams, char *pcParam[], char *p
 			  {
 
 			  }
+			  /*
 			  memcpy(connect_info.password,pcValue[i],strlen(pcValue[i]));
 			  connect_info.passwordlen = strlen(pcValue[i]);
-			  wifi_info_write();
+			  */
+			  passwordtemp = pcValue[i];
+			 // memcpy(passwordtemp,pcValue[i],strlen(pcValue[i]));
+			  wifi_info_write(ssidtemp,passwordtemp);
 			  restart_to_sta();
 			}
 	   }

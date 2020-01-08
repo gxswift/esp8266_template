@@ -7,6 +7,8 @@
 #include "portmacro.h"
 #include "freertos/queue.h"
 
+
+#define LOG_LOCAL_LEVEL ESP_LOG_NONE
 static const char *TAG = "rtc";
 #define RTC_MEM                  (RTC_USER_BASE)
 

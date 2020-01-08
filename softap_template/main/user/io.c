@@ -12,6 +12,11 @@
 #include "esp_system.h"
 
 #include "rtc_memory.h"
+
+#define LOG_LOCAL_LEVEL ESP_LOG_NONE
+
+
+
 static const char *TAG = "io";
 
 //GPIO16 	LED

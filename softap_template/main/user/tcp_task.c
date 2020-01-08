@@ -19,6 +19,13 @@
 
 #include "tcp_task.h"
 #include "io.h"
+
+
+#define LOG_LOCAL_LEVEL ESP_LOG_NONE
+
+
+
+
 #define EXAMPLE_WIFI_SSID CONFIG_WIFI_SSID
 #define EXAMPLE_WIFI_PASS CONFIG_WIFI_PASSWORD
 
