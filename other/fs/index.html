@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+    <title></title>
+    <style type="text/css">
+        /*通用样式*/
+        *{ margin: 0;padding: 0 }
+        .wp{
+	    margin: 0 auto; 
+	}
+        body{
+            background-color: #8D8ADD;
+            text-align: center;
+            font: 25px 'Microsoft YaHei';
+	    background:#f2f2f2 url(bg.gif) repeat;
+        }
+        .tit{
+            font-size: 30px;
+            margin-top: 8%;
+            margin-bottom: 5%;
+        }
+        .content{
+            text-align: center;
+            margin-bottom: 2%;
+        }
+        .content input{
+            height:50px ;
+            width: 300px;
+            margin-left: 15px;
+            font-size: 24px;
+        }
+        .btn input{
+            width: 100px;
+            height:50px ;
+            width: 100px;
+            margin:0 25px;
+            position: relative;
+            cursor: pointer;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <form ACTION="/set.cgi" method="get">
+        <div class="wp">
+            <div class="tit">
+                <h1>WiFi Connect Setting</h1>
+            </div>
+			<div class="content">
+				<div align="center">
+					<table border="10" width=600 height=300>
+					<tr>
+					<th style="font-size:40px;">名称</th>
+					<th style="font-size:40px;">数值</th>
+					</tr>
+					<tr>
+					<td class="s" align="center">SSID</td>
+					<td class="s" align="center">
+					<h2></span><input type="text" name="ssid"/></h2></iframe>
+					</td>
+					</tr>
+					<tr>
+					<td class="s" align="center">PASSWORD</td>
+					<td class="s" align="center">
+					<h2><input type="text" name="password"/></h2>
+					</td>
+					</tr>
+					</table> 
+				</div>
+			</div>
+            <div class="btn">
+                <input type="submit" value="确认"/>
+                <input type="reset" value="重置"/>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

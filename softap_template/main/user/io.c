@@ -13,7 +13,7 @@
 
 #include "rtc_memory.h"
 
-#define LOG_LOCAL_LEVEL ESP_LOG_NONE
+//#define LOG_LOCAL_LEVEL ESP_LOG_NONE
 
 
 
@@ -47,8 +47,12 @@ static void gpio_task_example(void *arg)
             ESP_LOGI(TAG, "GPIO[%d] intr, val: %d\n", io_num, gpio_get_level(io_num));
             if (io_num == 0 && gpio_get_level(io_num) == 1)
             {
-            	if (xTaskGetTickCount() > 2000*portTICK_RATE_MS)
-            	restart_to_ap();
+            	ESP_LOGI(TAG, "tick = %ld\r\n",xTaskGetTickCount());
+            	if (xTaskGetTickCount() > 2000/portTICK_RATE_MS)
+            	{
+            		ESP_LOGI(TAG, "restart!\r\n");
+            		restart_to_ap();
+            	}
             }
         }
     }

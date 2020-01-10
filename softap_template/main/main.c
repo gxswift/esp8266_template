@@ -30,6 +30,10 @@
 #include "tcp_task.h"
 #include "rtc_memory.h"
 #include "io.h"
+#include "sntp.h"
+
+#include "lwip/apps/netbiosns.h"
+
 
 static const char *TAG = "app";
 
@@ -125,7 +129,7 @@ void app_main()
 
     /* Check if device is provisioned */
     io_config();
-    xTaskCreate(restart_task, "restart", 512, NULL, 8, NULL);
+    xTaskCreate(restart_task, "restart", 1024, NULL, 8, NULL);
 
     uint32_t provisioned = rtc_mem_read(0);
     printf("rtc mem = %x,tick = %ld\r\n",provisioned,xTaskGetTickCount());
@@ -163,5 +167,8 @@ void app_main()
         wait_for_ip();
         xTaskCreate(tcp_client_task, "tcp_client", 4096, NULL, 5, NULL);
         xTaskCreate(tcp_server_task, "tcp_server", 4096, NULL, 5, NULL);
+        netbiosns_set_name("lwip_net");
+        netbiosns_init();
+       // xTaskCreate(sntp_example_task, "sntp_example_task", 2048, NULL, 10, NULL);
     }
 }

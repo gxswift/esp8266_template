@@ -8,7 +8,7 @@
 #include "freertos/queue.h"
 
 
-#define LOG_LOCAL_LEVEL ESP_LOG_NONE
+//#define LOG_LOCAL_LEVEL ESP_LOG_NONE
 static const char *TAG = "rtc";
 #define RTC_MEM                  (RTC_USER_BASE)
 
@@ -46,6 +46,7 @@ void restart_task(void *pvParameters)
 	restart_evt_queue = xQueueCreate(10, sizeof(uint32_t));
     while(1)
     {
+    	ESP_LOGI(TAG, "restart task start\r\n");
         if (xQueueReceive(restart_evt_queue, &restart, portMAX_DELAY))
         {
             ESP_LOGI(TAG, "restart val: %d\n", restart);
