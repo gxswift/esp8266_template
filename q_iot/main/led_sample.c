@@ -19,7 +19,7 @@
 #include "utils_timer.h"
 
 
-
+#include "io.h"
 
 #ifdef AUTH_MODE_CERT
     static char sg_cert_file[PATH_MAX + 1];      // full path of device cert file
@@ -503,7 +503,7 @@ static void deal_down_stream_user_logic(void *client,ProductDataDefine *light)
 		HAL_Printf( ANSI_COLOR_YELLOW"[  light is off ]|[color:%s]|[brightness:%s]|[%s]\n" ANSI_COLOR_RESET,\
 					ansi_color_name,brightness_bar,light->m_name);
 	}
-
+	//led_function(light->m_light_switch);
 #ifdef EVENT_POST_ENABLED
 	if(eCHANGED == get_property_state(&light->m_light_switch)){
 		if(light->m_light_switch){
@@ -523,6 +523,8 @@ static void deal_down_stream_user_logic(void *client,ProductDataDefine *light)
 		}
 
 		//switch state changed set EVENT0 flag, the events will be posted by eventPostCheck
+		led_function(light->m_light_switch);
+		printf("light = %d\r\n\r\n\r\n\r\n",light->m_light_switch);
 		IOT_Event_setFlag(client, FLAG_EVENT0);
 	}
 #endif
@@ -595,7 +597,7 @@ static int _get_sys_info(void *handle, char *pJsonDoc, size_t sizeOfBuffer)
 }
 
 
-int main_task() {
+int main_task(void *pvParameters) {
 
 	DeviceProperty *pReportDataList[TOTAL_PROPERTY_COUNT];
 	sReplyPara replyPara;

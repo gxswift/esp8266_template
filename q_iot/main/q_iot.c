@@ -129,13 +129,14 @@ static void wait_for_ip()
     ESP_LOGI(TAG, "Connected to AP");
 }
 #include "led_sample.h"
+#include "io.h"
 void app_main()
 {
     ESP_ERROR_CHECK( nvs_flash_init() );
     initialise_wifi();
     wait_for_ip();
-    main_task(0);
-//    xTaskCreate(main_task, "main", 10240, NULL, 5, NULL);
+    io_config();
+    xTaskCreate(main_task, "main", 1024*20, NULL, 5, NULL);
 }
 
 
