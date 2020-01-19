@@ -99,7 +99,7 @@ static esp_err_t event_handler(void *ctx, system_event_t *event)
 }
 
 
-
+#include "led_sample.h"
 void app_main()
 {
     /* Security version */
@@ -165,10 +165,14 @@ void app_main()
         ESP_LOGI(TAG, "Starting WiFi station");
         start_wifi_station();
         wait_for_ip();
+#if 0
         xTaskCreate(tcp_client_task, "tcp_client", 4096, NULL, 5, NULL);
         xTaskCreate(tcp_server_task, "tcp_server", 4096, NULL, 5, NULL);
         netbiosns_set_name("lwip_net");
         netbiosns_init();
+#else
+        xTaskCreate(main_task, "main", 1024*20, NULL, 5, NULL);
+#endif
        // xTaskCreate(sntp_example_task, "sntp_example_task", 2048, NULL, 10, NULL);
     }
 }

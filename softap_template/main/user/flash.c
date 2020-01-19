@@ -44,7 +44,7 @@ void wifi_info_read(char *ssid,char *password)
 
 void wifi_info_write(const char *ssid,const char *password)
 {
-	char password_decode[64]={0};
+	char password_decode[64] = {0};
 	memset(connect_info.ssid,0,sizeof(connect_info.ssid));
 	memset(connect_info.password,0,sizeof(connect_info.password));
 
